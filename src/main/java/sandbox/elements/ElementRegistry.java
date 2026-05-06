@@ -1,4 +1,4 @@
-package sandbox.particle;
+package sandbox.elements;
 
 public class ElementRegistry {
 
@@ -8,7 +8,8 @@ public class ElementRegistry {
         public static final int WATER = 2;
         public static final int SMOKE = 3;
         public static final int STONE = 4;
-        public static final int PINK_SALT = 5;
+        public static final int WALL = 5;
+        public static final int DIAMOND = 6;
     }
     
     private static final Element[] DEFS = new Element[256];

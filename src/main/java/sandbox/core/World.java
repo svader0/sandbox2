@@ -3,13 +3,13 @@ package sandbox.core;
 import java.nio.ByteBuffer;
 import org.lwjgl.system.MemoryUtil;
 
-import sandbox.particle.ElementRegistry;
+import sandbox.elements.ElementRegistry;
 
 public class World {
     public final int width, height;
 
     // Flat array of pre-allocated Cell objects, indexed by (y * width + x).
-    // We avoid allocations during the simulation step by reusing Cell objects and swapping references.
+    // We avoid allocations during the simulation step by having one set of Cell objects and swapping references.
     private final Cell[] grid;
 
     private final ByteBuffer pixels;
@@ -87,7 +87,7 @@ public class World {
     public void setFalling(int x, int y, boolean v) { setFlag(x, y, FLAG_FALLING, v); }
 
     // ------------------------------------------------------------------
-    // Per-cell data accessors (delegate to Cell fields)
+    // Per-cell data getters/setters
     // ------------------------------------------------------------------
 
     public byte getData(int x, int y)          { return inBounds(x, y) ? grid[y*width+x].data  : 0; }

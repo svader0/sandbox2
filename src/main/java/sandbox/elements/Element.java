@@ -1,4 +1,4 @@
-package sandbox.particle;
+package sandbox.elements;
 
 import sandbox.core.World;
 

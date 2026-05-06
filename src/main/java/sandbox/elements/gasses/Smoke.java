@@ -1,7 +1,6 @@
-package sandbox.particle.types;
+package sandbox.elements.gasses;
 
-import sandbox.particle.ElementRegistry;
-import sandbox.particle.defs.Gas;
+import sandbox.elements.ElementRegistry;
 
 public class Smoke extends Gas {
     public Smoke() {

@@ -3,10 +3,14 @@ package sandbox;
 import sandbox.core.Input;
 import sandbox.core.Window;
 import sandbox.core.World;
-import sandbox.particle.Element;
-import sandbox.particle.ElementRegistry;
+import sandbox.elements.Element;
+import sandbox.elements.ElementRegistry;
+import sandbox.elements.gasses.Smoke;
+import sandbox.elements.liquids.Water;
+import sandbox.elements.solids.*;
+
 import java.nio.ByteBuffer;
-import sandbox.particle.types.*;
+
 import sandbox.render.Renderer;
 import sandbox.util.geometry.Line;
 import sandbox.util.geometry.Circle;
@@ -26,7 +30,8 @@ public class Main {
         ElementRegistry.register(new Water());
         ElementRegistry.register(new Smoke());
         ElementRegistry.register(new Stone());
-        ElementRegistry.register(new PinkSalt());
+        ElementRegistry.register(new Wall());
+        ElementRegistry.register(new Diamond());
 
         Input input           = new Input(window.getHandle());
         int   selectedElement = ElementRegistry.ID.SAND;

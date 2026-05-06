@@ -1,8 +1,9 @@
-package sandbox.particle.defs;
+package sandbox.elements.solids;
 
 import sandbox.core.World;
-import sandbox.particle.ElementRegistry;
-import sandbox.particle.Element;
+import sandbox.elements.Element;
+import sandbox.elements.ElementRegistry;
+import sandbox.elements.liquids.Liquid;
 
 // Falls and piles — sand, salt, gunpowder etc.
 public abstract class MovableSolid extends Element {
@@ -10,18 +11,21 @@ public abstract class MovableSolid extends Element {
     private static final int   GRAVITY    = 1;
     private static final int   MAX_VY     = 6;
     private static final int   MAX_VX     = 5;
-    private static final int   FRICTION   = 1;
     private static final float SPLASH_MAX = 0.7f;
 
     // Probability (0–1) that a passing particle dislodges this one from rest.
-    // Also controls angle of repose: low = flat pile (sand), high = steep pile (salt).
     protected final float inertialResistance;
 
+    // 0 = frictionless (slides forever), 1 = instant stop.
+    protected final float friction;
+
+    // pre-computes all the possible shade variations to avoid doing the math every frame
     private final int[][] colorCache = new int[256][3];
 
-    protected MovableSolid(int id, String name, int[] color, float inertialResistance) {
+    protected MovableSolid(int id, String name, int[] color, float inertialResistance, float friction) {
         super(id, name, color);
         this.inertialResistance = inertialResistance;
+        this.friction = friction;
         for (int i = 0; i < 256; i++) {
             int v = (byte) i;
             colorCache[i][0] = Math.max(0, Math.min(255, color[0] + v));
@@ -91,7 +95,7 @@ public abstract class MovableSolid extends Element {
         // Low resistance → slides far to find a drop → shallow pile.
         // High resistance → only checks immediate diagonal → steep pile.
         if (vy == 0 && vx == 0 && Math.random() >= inertialResistance) {
-            int maxSlide = Math.max(1, Math.round((1f - inertialResistance) * 8));
+            int maxSlide = Math.max(1, Math.round((1f - friction) * 8));
             boolean goLeft = Math.random() > 0.5;
             int d1 = goLeft ? -1 : 1;
             int slide = findSlide(world, cx, cy, d1, maxSlide);
@@ -121,8 +125,11 @@ public abstract class MovableSolid extends Element {
                     break;
                 }
             }
-            if      (vx > 0) vx = Math.max(0, vx - FRICTION);
-            else if (vx < 0) vx = Math.min(0, vx + FRICTION);
+            float fVx = vx * (1f - friction);
+            int   sign = fVx >= 0 ? 1 : -1;
+            int   mag  = (int) Math.abs(fVx);
+            if (Math.random() < Math.abs(fVx) - mag) mag++;
+            vx = sign * mag;
 
             if (cx != x || cy != y) world.markMoved(cx, cy);
         }

@@ -1,8 +1,7 @@
-package sandbox.particle.types;
+package sandbox.elements.liquids;
 
 import sandbox.core.World;
-import sandbox.particle.ElementRegistry;
-import sandbox.particle.defs.Liquid;
+import sandbox.elements.ElementRegistry;
 
 public class Water extends Liquid {
     public Water() {

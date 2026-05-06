@@ -1,6 +1,6 @@
 package sandbox.core;
 
-import sandbox.particle.Element;
+import sandbox.elements.Element;
 
 // Holds all mutable state for one grid position.
 // Adding a new per-cell property means adding a field here and nowhere else.

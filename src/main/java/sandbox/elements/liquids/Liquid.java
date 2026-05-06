@@ -1,7 +1,7 @@
-package sandbox.particle.defs;
+package sandbox.elements.liquids;
 
 import sandbox.core.World;
-import sandbox.particle.Element;
+import sandbox.elements.Element;
 
 // Flows and spreads — water, lava, acid etc.
 public abstract class Liquid extends Element {

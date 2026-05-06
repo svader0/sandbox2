@@ -1,7 +1,7 @@
-package sandbox.particle.defs;
+package sandbox.elements.solids;
 
 import sandbox.core.World;
-import sandbox.particle.Element;
+import sandbox.elements.Element;
 
 public class ImmovableSolid extends Element {
     public ImmovableSolid(int id, String name, int[] color) {
