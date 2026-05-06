@@ -1,0 +1,53 @@
+import org.gradle.internal.os.OperatingSystem
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+project.ext.lwjglVersion = "3.4.1"
+
+switch (OperatingSystem.current()) {
+	case OperatingSystem.LINUX:
+		project.ext.lwjglNatives = "natives-linux"
+		def osArch = System.getProperty("os.arch")
+		if (osArch.startsWith("arm") || osArch.startsWith("aarch64")) {
+			project.ext.lwjglNatives += osArch.contains("64") || osArch.startsWith("armv8") ? "-arm64" : "-arm32"
+		} else if  (osArch.startsWith("ppc")) {
+			project.ext.lwjglNatives += "-ppc64le"
+		} else if  (osArch.startsWith("riscv")) {
+			project.ext.lwjglNatives += "-riscv64"
+		}
+		break
+	case OperatingSystem.MAC_OS:
+		project.ext.lwjglNatives = "natives-macos-arm64"
+		break
+	case OperatingSystem.WINDOWS:
+		project.ext.lwjglNatives = "natives-windows"
+		break
+}
+
+repositories {
+	mavenCentral()
+}
+
+application {
+    mainClass = 'sandbox.Main'
+    // Required on newer JDKs for LWJGL native memory access
+    applicationDefaultJvmArgs = [
+        '--enable-native-access=ALL-UNNAMED'
+    ]
+}
+
+dependencies {
+	implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+
+	implementation "org.lwjgl:lwjgl"
+	implementation "org.lwjgl:lwjgl-glfw"
+	implementation "org.lwjgl:lwjgl-opengl"
+	implementation "org.lwjgl:lwjgl::$lwjglNatives"
+	implementation "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+	implementation "org.lwjgl:lwjgl-opengl::$lwjglNatives"
+}
+
+sourceSets.main.resources.srcDirs = ['src/main/resources']
