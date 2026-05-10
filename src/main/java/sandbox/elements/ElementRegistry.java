@@ -3,13 +3,17 @@ package sandbox.elements;
 public class ElementRegistry {
 
     public static final class ID {
-        public static final int EMPTY = 0;
-        public static final int SAND = 1;
-        public static final int WATER = 2;
-        public static final int SMOKE = 3;
-        public static final int STONE = 4;
-        public static final int WALL = 5;
-        public static final int DIAMOND = 6;
+        public static final int EMPTY    = 0;
+        public static final int SAND     = 1;
+        public static final int WATER    = 2;
+        public static final int SMOKE    = 3;
+        public static final int STONE    = 4;
+        public static final int WALL     = 5;
+        public static final int INFLOW   = 6;
+        public static final int OUTFLOW  = 7;
+        public static final int OIL      = 8;
+        public static final int LAVA     = 9;
+        public static final int STEAM    = 10;
     }
     
     private static final Element[] DEFS = new Element[256];

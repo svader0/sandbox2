@@ -39,6 +39,9 @@ public abstract class Element {
     // Called when the user places this element; override to set initial data[] values etc.
     public void onSpawn(World world, int x, int y) {}
 
+    // Called when this element is removed (replaced by another); override to e.g. spawn new elements based on cell data.
+    public void onRemove(World world, int x, int y) {}
+
     // Optional — override to add neighbor reaction logic
     public void onNeighbor(World world, int x, int y, int nx, int ny) {}
 }

@@ -32,11 +32,8 @@ public abstract class Gas extends Element {
             return;
         }
 
-        // Read stored velocities. Vx is signed via getVx(); Vy stored as byte but getVy() returns unsigned,
-        // so convert to signed range manually.
-        int vx = world.getVx(x, y); // signed
-        int vyu = world.getVy(x, y); // unsigned 0..255
-        int vy = (vyu & 0x80) != 0 ? vyu - 256 : vyu; // signed vy (-128..127)
+        int vx = world.getVx(x, y);
+        int vy = world.getVy(x, y);
 
         // Apply 'anti-gravity' (gas rises)
         vy = Math.max(vy - GRAVITY, -MAX_VY);

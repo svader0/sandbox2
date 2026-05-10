@@ -6,6 +6,9 @@ import sandbox.core.World;
 import sandbox.elements.Element;
 import sandbox.elements.ElementRegistry;
 import sandbox.elements.gasses.Smoke;
+import sandbox.elements.gasses.Steam;
+import sandbox.elements.liquids.Lava;
+import sandbox.elements.liquids.Oil;
 import sandbox.elements.liquids.Water;
 import sandbox.elements.solids.*;
 
@@ -31,7 +34,11 @@ public class Main {
         ElementRegistry.register(new Smoke());
         ElementRegistry.register(new Stone());
         ElementRegistry.register(new Wall());
-        ElementRegistry.register(new Diamond());
+        ElementRegistry.register(new Inflow());
+        ElementRegistry.register(new Outflow());
+        ElementRegistry.register(new Oil());
+        ElementRegistry.register(new Lava());
+        ElementRegistry.register(new Steam());
 
         Input input           = new Input(window.getHandle());
         int   selectedElement = ElementRegistry.ID.SAND;
@@ -61,8 +68,9 @@ public class Main {
             final int element = selectedElement, radius = brushRadius;
             if (input.isMouseDown(GLFW_MOUSE_BUTTON_LEFT))
                 Line.applyForEach(prevMx, prevMy, mx, my, (x, y) -> paintCircle(world, x, y, radius, element));
-            if (input.isMouseDown(GLFW_MOUSE_BUTTON_RIGHT))
+            if (input.isMouseDown(GLFW_MOUSE_BUTTON_RIGHT)) {
                 Line.applyForEach(prevMx, prevMy, mx, my, (x, y) -> paintCircle(world, x, y, radius, ElementRegistry.ID.EMPTY));
+            }
             prevMx = mx;
             prevMy = my;
 

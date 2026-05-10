@@ -38,13 +38,12 @@ public class World {
         return c.type == null ? ElementRegistry.ID.EMPTY : c.type.id;
     }
 
-    // Sets the cell type by ID. Passing EMPTY (0) resets all fields.
+    // Sets the cell type by ID. Always resets all fields first so no stale velocity/flags survive.
     public void set(int x, int y, int typeId) {
         if (!inBounds(x, y)) return;
         Cell c = grid[y * width + x];
-        if (typeId == ElementRegistry.ID.EMPTY) {
-            c.reset();
-        } else {
+        c.reset();
+        if (typeId != ElementRegistry.ID.EMPTY) {
             c.type = ElementRegistry.get(typeId);
         }
     }
@@ -65,9 +64,10 @@ public class World {
     // Flags (bit-packed booleans inside Cell.flags)
     // ------------------------------------------------------------------
 
-    public static final int FLAG_IGNITED = 0; // bit 0
-    public static final int FLAG_MOVED   = 1; // bit 1 — cleared each step; prevents double-processing lateral slides
-    public static final int FLAG_FALLING = 2; // bit 2 — persists; true if the particle moved last frame
+    public static final int FLAG_IGNITED  = 0; // bit 0
+    public static final int FLAG_MOVED    = 1; // bit 1 — cleared each step; prevents double-processing lateral slides
+    public static final int FLAG_FALLING  = 2; // bit 2 — persists; true if the particle moved last frame
+    public static final int FLAG_FLOW_DIR = 3; // bit 3 — liquid horizontal flow direction (0 = left, 1 = right)
 
     public boolean getFlag(int x, int y, int bit) {
         if (!inBounds(x, y)) return false;
@@ -86,6 +86,10 @@ public class World {
     public boolean isFalling(int x, int y)          { return getFlag(x, y, FLAG_FALLING); }
     public void setFalling(int x, int y, boolean v) { setFlag(x, y, FLAG_FALLING, v); }
 
+    // Liquid horizontal flow direction: -1 = left, +1 = right.
+    public int getFlowDir(int x, int y)             { return getFlag(x, y, FLAG_FLOW_DIR) ? 1 : -1; }
+    public void setFlowDir(int x, int y, int dir)   { setFlag(x, y, FLAG_FLOW_DIR, dir > 0); }
+
     // ------------------------------------------------------------------
     // Per-cell data getters/setters
     // ------------------------------------------------------------------
@@ -99,9 +103,9 @@ public class World {
     public byte getTemp(int x, int y)          { return inBounds(x, y) ? grid[y*width+x].temp  : 0; }
     public void setTemp(int x, int y, byte t)  { if (inBounds(x, y)) grid[y*width+x].temp  = t; }
 
-    public int  getVx(int x, int y)            { return inBounds(x, y) ? grid[y*width+x].velX          : 0; } // byte auto-sign-extends to int
+    public int  getVx(int x, int y)            { return inBounds(x, y) ? grid[y*width+x].velX : 0; } // signed -128..127
     public void setVx(int x, int y, int v)     { if (inBounds(x, y)) grid[y*width+x].velX = (byte) v; }
-    public int  getVy(int x, int y)            { return inBounds(x, y) ? grid[y*width+x].velY & 0xFF   : 0; } // unsigned
+    public int  getVy(int x, int y)            { return inBounds(x, y) ? grid[y*width+x].velY : 0; } // signed -128..127
     public void setVy(int x, int y, int v)     { if (inBounds(x, y)) grid[y*width+x].velY = (byte) v; }
 
     // ------------------------------------------------------------------

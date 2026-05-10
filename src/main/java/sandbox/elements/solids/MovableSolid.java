@@ -159,9 +159,10 @@ public abstract class MovableSolid extends Element {
     }
 
     private boolean canFallInto(World world, int x, int y) {
+        if (!world.inBounds(x, y)) return false;
         if (world.isEmpty(x, y)) return true;
         Element def = ElementRegistry.get(world.get(x, y));
-        return def instanceof Liquid && ((Liquid) def).density < 10;
+        return def instanceof Liquid;
     }
 
     private static int clamp(int v, int min, int max) {
